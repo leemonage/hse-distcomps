@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
+
+  web:
+    build: ./services/web
+    ports:
+      - "8091:8091"
+    volumes:
+      - ./services/web:/usr/src/services/web
+    depends_on:
+      - db
+    environment:
+      DATABASE_URI: "postgresql://postgres:example@db:5432"
