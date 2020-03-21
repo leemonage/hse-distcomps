@@ -1,0 +1,135 @@
+swagger: "2.0"
+
+info:
+  title: "Shop"
+  description: "Simple REST API for the shop."
+  version: "1.0"
+
+paths:
+  /products:
+    get:
+      summary: Get list of products
+      parameters:
+          - in: query
+            name: start
+            required: false
+            schema:
+              type: integer
+              description: start position
+          - in: query
+            name: limit
+            required: false
+            schema:
+              type: integer
+              description: max count of elements per query
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products: List of products
+  /product:
+    get:
+      summary: Get product by ID
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: ID of product
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product: Product
+        404:
+          description: Not found
+    post:
+      summary: Add new product
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Request post object
+          required: true
+          schema:
+            $ref: '#/definitions/Product'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: True/False
+        400:
+          description: Bad request
+    put:
+      summary: Edit product by ID
+      consumes:
+        - application/json
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+            description: ID of product
+        - in: body
+          name: body
+          description: Request post object
+          required: true
+          schema:
+            $ref: '#/definitions/Product'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product: Product
+        400:
+          description: Bad request
+        404:
+          description: Not found
+    delete:
+      summary: Delete product by ID
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of product
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: True/False
+        404:
+          description: Not found
+definitions:
+  Product:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      category:
+        type: string
