@@ -6,6 +6,52 @@ info:
   version: "1.0"
 
 paths:
+  /register:
+    post:
+      summary: Register a new user
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Request post object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: True/False
+        400:
+          description: Bad request
+  /auth:
+    post:
+      summary: Log in
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Request post object
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: True/False
+        400:
+          description: Bad request
   /products:
     get:
       summary: Get list of products
@@ -132,4 +178,10 @@ definitions:
       name:
         type: string
       category:
+        type: string
+  User:
+    properties:
+      username:
+        type: string
+      password:
         type: string

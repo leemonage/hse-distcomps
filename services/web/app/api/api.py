@@ -1,6 +1,8 @@
-from .. import app, db, Product
+from .. import app, db, Product, User, login_required
 from flask import Blueprint, request, jsonify, make_response, abort
 import logging
+from passlib.hash import pbkdf2_sha256
+from flask_jwt import jwt_required
 
 
 api = Blueprint('api', __name__)
@@ -25,7 +27,26 @@ def handle404(error):
 
 # api methods
 
+@api.route('/register', methods=['POST'])
+def register():
+    if not request.json:
+        abort(400)
+    
+    if 'username' not in request.json or 'password' not in request.json:
+        abort(400)
+
+    username = request.json['username']
+    password = request.json['password']
+
+    new_user = User(username, pbkdf2_sha256.hash(password))
+
+    db.session.merge(new_user)
+    db.session.commit()
+    return jsonify({'success': True})
+
+
 @api.route('/products', methods=['GET'])
+@login_required
 def get_products():
     products = db.session.query(Product).order_by(Product.id).all()
     result = list(map(lambda x: x.to_dict(), products))
@@ -50,6 +71,7 @@ def get_products():
 
 
 @api.route('/product', methods=['GET'])
+@login_required
 def get_product():
     if not request.args:
         abort(400)
@@ -69,6 +91,7 @@ def get_product():
 
 
 @api.route('/product', methods=['POST'])
+@login_required
 def add_product():
     if not request.json:
         abort(400)
@@ -96,6 +119,7 @@ def add_product():
 
 
 @api.route('/product', methods=['PUT'])
+@login_required
 def update_product():
     if not request.json or not request.args:
         abort(400)
@@ -120,6 +144,7 @@ def update_product():
 
 
 @api.route('/product', methods=['DELETE'])
+@login_required
 def delete_product():
     if not request.args:
         abort(400)

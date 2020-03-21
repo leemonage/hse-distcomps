@@ -1,5 +1,6 @@
 Click==7.0
 Flask==1.1.1
+Flask-JWT
 Flask-Cors==3.0.8
 flask-swagger-ui==3.25.0
 itsdangerous==1.1.0
@@ -10,3 +11,4 @@ Werkzeug==1.0.0
 flask-sqlalchemy
 psycopg2
 sqlalchemy
+passlib
