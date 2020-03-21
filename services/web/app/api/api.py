@@ -27,8 +27,26 @@ def handle404(error):
 
 @api.route('/products', methods=['GET'])
 def get_products():
-    products = db.session.query(Product).all()
-    return jsonify({'products': list(map(lambda x: x.to_dict(), products))})
+    products = db.session.query(Product).order_by(Product.id).all()
+    result = list(map(lambda x: x.to_dict(), products))
+
+    start = 0
+    limit = len(result)
+
+    if request.args:
+        try:
+            if 'start' in request.args:
+                start = max(0, int(request.args.get('start')))
+        except Exception:
+            abort(400)
+
+        try:
+            if 'limit' in request.args:
+                limit = max(1, int(request.args.get('limit')))
+        except Exception:
+            abort(400)
+
+    return jsonify({'products': result[min(start, len(result) - 1):min(start + limit, len(result))]})
 
 
 @api.route('/product', methods=['GET'])

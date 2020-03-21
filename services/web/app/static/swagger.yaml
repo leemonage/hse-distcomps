@@ -9,6 +9,19 @@ paths:
   /products:
     get:
       summary: Get list of products
+      parameters:
+          - in: query
+            name: start
+            required: false
+            schema:
+              type: integer
+              description: start position
+          - in: query
+            name: limit
+            required: false
+            schema:
+              type: integer
+              description: max count of elements per query
       responses:
         200:
           description: Success

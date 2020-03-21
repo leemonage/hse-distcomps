@@ -22,4 +22,4 @@
 $ docker-compose up -d
 ```
 
-На http://localhost/swagger можно подробнее ознакомиться с API.
+На http://localhost/8091/swagger можно подробнее ознакомиться с API.
